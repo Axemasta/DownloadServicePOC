@@ -7,14 +7,14 @@ Console.WriteLine("Starting program...");
 var downloadManager = new DownloadManager();
 
 var initialDownloadTask = new InitialDownloadTask();
-var secondDownloadTask = new RelatedDownloadTask();
-var thirdDownloadTask = new ProcessingDownloadTask();
-var fourthDownloadTask = new DigitSplittingTask();
+var relatedDownloadTask = new RelatedDownloadTask();
+var processingDownloadTask = new ProcessingDownloadTask();
+var digitSplittingTask = new DigitSplittingTask();
 
 downloadManager.AddTask(initialDownloadTask);
-downloadManager.AddTask(secondDownloadTask, initialDownloadTask.Id);
-downloadManager.AddTask(thirdDownloadTask, secondDownloadTask.Id);
-downloadManager.AddTask(fourthDownloadTask);
+downloadManager.AddTask(relatedDownloadTask);
+downloadManager.AddTask(processingDownloadTask);
+downloadManager.AddTask(digitSplittingTask);
 
 var progress = new Progress<DownloadProgressUpdate>(update =>
 {

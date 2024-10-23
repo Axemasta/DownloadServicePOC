@@ -2,14 +2,8 @@ using DownloadServicePOC.Models;
 
 namespace DownloadServicePOC.Tasks;
 
-public class InitialDownloadTask : DownloadTask<long, long>
+public class InitialDownloadTask() : DownloadTask<long, long>(TaskIds.InitialDownloadTaskId)
 {
-    public override DownloadTaskId Id { get; } = new()
-    {
-        Id = new("082e9f7a-06eb-4d83-928c-b5b3cb32267f"),
-        Name = "Initial Download"
-    };
-    
     public override async Task<long> RunAsync(long input)
     {
         // throw new NotImplementedException("I DONT WORK");

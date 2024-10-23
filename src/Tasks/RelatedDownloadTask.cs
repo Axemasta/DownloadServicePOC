@@ -2,13 +2,9 @@ using DownloadServicePOC.Models;
 
 namespace DownloadServicePOC.Tasks;
 
-public class RelatedDownloadTask : DownloadTask<long, string>
+public class RelatedDownloadTask() : DownloadTask<long, string>(TaskIds.RelatedDownloadTaskId)
 {
-    public override DownloadTaskId Id { get; } = new DownloadTaskId()
-    {
-        Id = new("7c7aea4f-66bc-49c9-8d6e-136d8c79a554"),
-        Name = "Related Download Task",
-    };
+    public override DownloadTaskId? DependantTaskId => TaskIds.InitialDownloadTaskId;
 
     public override async Task<string> RunAsync(long input)
     {

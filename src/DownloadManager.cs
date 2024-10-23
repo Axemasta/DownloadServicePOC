@@ -9,21 +9,21 @@ public class DownloadManager
     private readonly Dictionary<DownloadTaskId, DownloadTaskId?> _taskDependencies = new();
     private readonly Dictionary<DownloadTaskId, (Type InputType, Type OutputType)> _taskTypes = new();
 
-    public void AddTask<TInput, TOutput>(DownloadTask<TInput, TOutput> downloadTask, DownloadTaskId? dependsOnTaskId = null)
+    public void AddTask<TInput, TOutput>(DownloadTask<TInput, TOutput> downloadTask)
     {
-        if (dependsOnTaskId.HasValue)
+        if (downloadTask.DependantTaskId.HasValue)
         {
-            if (!_taskTypes.ContainsKey(dependsOnTaskId.Value))
+            if (!_taskTypes.ContainsKey(downloadTask.DependantTaskId.Value))
             {
-                throw new ArgumentException($"Task with ID {dependsOnTaskId.Value} does not exist.");
+                throw new ArgumentException($"Task with ID {downloadTask.DependantTaskId.Value} does not exist.");
             }
 
-            var dependentTaskTypes = _taskTypes[dependsOnTaskId.Value];
+            var dependentTaskTypes = _taskTypes[downloadTask.DependantTaskId.Value];
 
             if (dependentTaskTypes.OutputType != typeof(TInput))
             {
                 throw new InvalidOperationException(
-                    $"Type mismatch: Task {dependsOnTaskId.Value} outputs {dependentTaskTypes.OutputType}, " +
+                    $"Type mismatch: Task {downloadTask.DependantTaskId.Value} outputs {dependentTaskTypes.OutputType}, " +
                     $"but Task {downloadTask.Id} expects {typeof(TInput)} as input.");
             }
         }
@@ -48,7 +48,7 @@ public class DownloadManager
         });
 
         _taskTypes[downloadTask.Id] = (typeof(TInput), typeof(TOutput));
-        _taskDependencies[downloadTask.Id] = dependsOnTaskId;
+        _taskDependencies[downloadTask.Id] = downloadTask.DependantTaskId;
     }
 
     public async Task<DownloadTaskResults> RunAllAsync<TFinal>(TFinal initialInput, IProgress<DownloadProgressUpdate> progress = null)

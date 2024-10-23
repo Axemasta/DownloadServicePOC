@@ -1,8 +1,10 @@
 namespace DownloadServicePOC.Models;
 
-public abstract class DownloadTask<TInput, TOutput>
+public abstract class DownloadTask<TInput, TOutput>(DownloadTaskId id)
 {
-    public abstract DownloadTaskId Id { get; }
-
+    public DownloadTaskId Id => id;
+    
     public abstract Task<TOutput> RunAsync(TInput input);
+
+    public virtual DownloadTaskId? DependantTaskId { get; }
 }
